@@ -7,8 +7,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class User implements UserDetails {
@@ -20,16 +22,22 @@ public class User implements UserDetails {
     @NotBlank(message = "username is required")
     @Column(unique = true)
     private String username;
+
     @NotBlank(message = "Please enter your full name")
     private String fullName;
+
     @NotBlank(message = "Password field is required")
     private String password;
+
     @Transient
     private String confirmPassword;
     private Date create_At;
     private Date update_At;
 
     //OneToMany with Project
+    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "user", orphanRemoval = true)
+    private List<Project> projects = new ArrayList<>();
+
 
     public User() {
     }
@@ -100,6 +108,13 @@ public class User implements UserDetails {
         this.update_At = new Date();
     }
 
+    public List<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
+    }
     /*
     UserDetails interface methods
      */

@@ -33,9 +33,18 @@ public class Project {
     @JsonFormat(pattern = "yyyy-mm-dd")
     private Date updated_At;
 
+    //One to One
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "project")
     @JsonIgnore
     private Backlog backlog;
+
+    //Many to one
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    private User user;
+
+    //To save the name of the person who created the project
+    private String projectLeader;
 
     public Project() {
     }
@@ -122,4 +131,19 @@ public class Project {
         this.updated_At = new Date();
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getProjectLeader() {
+        return projectLeader;
+    }
+
+    public void setProjectLeader(String projectLeader) {
+        this.projectLeader = projectLeader;
+    }
 }
